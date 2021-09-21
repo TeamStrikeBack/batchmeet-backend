@@ -1,3 +1,4 @@
 {
-  "jwtSecret": "mysecrettoken"
+  "jwtSecret": "mysecrettoken",
+  "jwtResetPassword":"resetpasswordtoken"
 }

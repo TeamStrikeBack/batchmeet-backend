@@ -1,6 +1,7 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const colors = require('colors');
+const nodemailer = require('nodemailer');
 
 
 const connectDB = require('./config/db');
