@@ -123,6 +123,9 @@ router.put('/updateuser',auth, async(req,res)=>{
     try{
         //Update User
         const user= await User.findOne({_id:req.user.id});
+        if(!user){
+            res.status(400).send('User dpes not exists');
+        }else{
         console.log(req.body);
         if(req.body.name){
             user.name=req.body.name;
@@ -139,6 +142,7 @@ router.put('/updateuser',auth, async(req,res)=>{
     
         await user.save();
         res.json({msg:'User Updated'});
+    }
        
     }catch(err){
         console.error(err.message);
