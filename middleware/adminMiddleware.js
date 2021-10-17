@@ -1,26 +1,33 @@
 const jwt = require('jsonwebtoken');
 const config = require('config');
 
-module.exports = function (req,res){
+//import user model
+const User = require('../models/User');
 
-    // Get token from the header
-    const token = req.header('x-auth-token');
-
-    //check if not token
-    if(!token){
-        return res.status(401).json({msg: 'No token,authorization denied'});
-    }
+module.exports = async function (req,res,next){
 
     try{
+        //get token from header
+        const token = req.header('x-auth-token');
+
+        //decode token
         const decoded = jwt.verify(token,config.get('jwtSecret'));
 
-        const userType  = decoded.user.role;
+        //get user id
+        const userId  = decoded.user.id;
 
 
-        if(userType.toString()=="admin"){
-            return true;
+        //find user
+        const user =  await User.findById(userId);
+
+        if(!user){
+            return res.status(404).json({msg: 'Not found user,thrown by admin middleware'});
+        }
+
+        if(user.role == "admin"){
+            next();
         }else {
-            return false;
+            return res.status(401).json({msg: 'Not an Admin,authorization denied'});
         }
 
     }catch (err){
