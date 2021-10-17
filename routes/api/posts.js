@@ -55,7 +55,7 @@ router.post('/',auth,async (req,res) => {
 // @route  GET api/posts
 // @desc   Get all posts
 //@access  Private
-router.get('/', auth, async (req, res) => {
+router.get('/', [auth], async (req, res) => {
     try {
         //console.log(admin(req,res));
         const posts = await Post.find().sort({date: -1});
@@ -319,7 +319,7 @@ router.put('/unlike/:id', auth, async (req, res) => {
         //Get remove index
         const removeIndex = post.likes.map(like => like.user.toString()).indexOf(req.params.id);
 
-        //
+        //remove the like array element
         post.likes.splice(removeIndex, 1);
 
         //save to DB
